@@ -1,0 +1,108 @@
+<!doctype html>
+<link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+<style>
+	.scroll-container {
+	/* scrolling */
+		overflow-y: scroll;
+		scroll-snap-type: y mandatory;
+		overscroll-behavior-y: none;
+	/* sizing and layout */
+		--itemHeight: 40px;
+		--itemGap: 10px;
+		--containerHeight: calc((var(--itemHeight) * 7) + (var(--itemGap) * 6));
+		width: 210px; 
+		height: var(--containerHeight);
+		display: flex; 
+		flex-direction: column;
+		align-items: center;
+		row-gap: var(--itemGap);
+		border-radius: 4px; 
+	/* paint */
+		--topBit: calc((var(--containerHeight) - var(--itemHeight))/2);
+		--footBit: calc((var(--containerHeight) + var(--itemHeight))/2);
+		background: linear-gradient(rgb(225 236 253), rgb(225 236 253) var(--topBit), rgb(20 53 241 / .5) var(--topBit), rgb(20 53 241 / .5) var(--footBit), rgb(225 236 253) var(--footBit));
+		box-shadow: 0 0 10px #eee;
+	
+	/* items inside scroll container */	
+		.scroll-items {
+		/* sizing and layout */
+			width: 90%;
+			flex: 0 0 var(--itemHeight);
+			box-sizing: border-box;
+			padding-inline: 20px;
+			border-radius: inherit;
+			text-align: center;
+			&:first-of-type {
+				margin-block-start: var(--topBit); }	
+			&:last-of-type {
+				margin-block-end: var(--topBit); }	
+		/* paint and font */
+			background: linear-gradient(to right, rgb(73 161 247), rgb(54 97 194));
+			box-shadow: 0 0 4px rgb(54 97 194);
+			font: 16pt/var(--itemHeight) 'poppins';
+			color: white;
+			input { appearance: none; } 
+			
+			scroll-snap-align: center;
+			pointer-events: none;
+				
+			&:has(:checked) { /* if radio checked */
+				background: rgb(20 53 241); }
+		}
+	}
+	h1 { font-size: 18pt; }
+	body {
+		height: 100vh;
+		display: grid;
+		place-content: center;
+		place-items: center;
+		row-gap: 30px;
+		margin: 0;
+		font-family: 'crimson text';
+		user-select: none;
+		-moz-user-select: none;
+		-webkit-user-select: none;
+	}
+</style>
+
+<h1>Scroll to select</h1>
+<section class=scroll-container>
+	<label class=scroll-items>2013<input type=radio name=items /></label>
+	<label class=scroll-items>2014<input type=radio name=items /></label>
+	<label class=scroll-items>2015<input type=radio name=items /></label>
+	<label class=scroll-items>2016<input type=radio name=items /></label>
+	<label class=scroll-items>2017<input type=radio name=items /></label>
+	<label class=scroll-items>2018<input type=radio name=items /></label>
+	<label class=scroll-items>2019<input type=radio name=items /></label>
+	<label class=scroll-items>2020<input type=radio name=items /></label>
+	<label class=scroll-items>2021<input type=radio name=items /></label>
+	<label class=scroll-items>2022<input type=radio name=items /></label>
+	<label class=scroll-items>2023<input type=radio name=items /></label>
+	<label class='scroll-items selected'>2024<input type=radio name=items /></label>
+	<label class=scroll-items>2025<input type=radio name=items /></label>
+	<label class=scroll-items>2026<input type=radio name=items /></label>
+	<label class=scroll-items>2027<input type=radio name=items /></label>
+	<label class=scroll-items>2028<input type=radio name=items /></label>
+	<label class=scroll-items>2029<input type=radio name=items /></label>
+	<label class=scroll-items>2030<input type=radio name=items /></label>
+	<label class=scroll-items>2031<input type=radio name=items /></label>
+	<label class=scroll-items>2032<input type=radio name=items /></label>
+	<label class=scroll-items>2033<input type=radio name=items /></label>
+	<label class=scroll-items>2034<input type=radio name=items /></label>
+	<label class=scroll-items>2035<input type=radio name=items /></label>
+</section>
+
+<script>
+/* scroll to the initial selected item when page loads */
+let selected_item = (document.querySelector(".selected")).getBoundingClientRect();
+let scroll_container = document.querySelector(".scroll-container");
+scroll_container.scrollTo(0,selected_item.top - scroll_container.offsetHeight - selected_item.height);
+
+let observer = new IntersectionObserver(entries => { 
+	entries.forEach(entry => {
+		with(entry) if(isIntersecting) target.children[0].checked = true;
+	});
+  }, {root: scroll_container, rootMargin: `-51% 0px -49% 0px`});
+document.querySelectorAll(`.scroll-items`).forEach(item => observer.observe(item));
+</script>
